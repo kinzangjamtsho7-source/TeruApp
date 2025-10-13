@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Teeru — Add Expense</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    :root{
+      --purple:#4b00b5;
+      --purple-100:#f5f0ff;
+      --muted:#6b6b7a;
+      --radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Segoe UI",Roboto,Arial,sans-serif;
+      background:#fff;
+      color:#222;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* Header */
+    .header{
+      background:var(--purple);
+      color:#fff;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:700;
+      font-size:20px;
+    }
+    .logo img{
+      width:40px;height:40px;
+      border-radius:10px;
+      border:2px solid rgba(255,255,255,0.85);
+    }
+    .controls{display:flex;align-items:center;gap:12px;}
+    .notification{position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:rgba(255,255,255,0.1);cursor:pointer;}
+    .notification .badge{position:absolute;top:-5px;right:-5px;background:#ff3b30;color:#fff;font-size:11px;padding:2px 6px;border-radius:999px;border:2px solid var(--purple);font-weight:700;}
+    .avatar{width:34px;height:34px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,0.2);}
+    .avatar img{width:100%;height:100%;object-fit:cover;}
+
+    /* Main form */
+    .main{
+      padding:22px;
+      max-width:600px;
+      margin:0 auto 90px;
+    }
+    h1{
+      font-size:22px;
+      margin-bottom:20px;
+      text-align:center;
+    }
+    .form-group{
+      margin-bottom:18px;
+    }
+    label{
+      display:block;
+      margin-bottom:6px;
+      font-weight:600;
+      font-size:14px;
+    }
+    input,select,textarea{
+      width:100%;
+      padding:12px 14px;
+      border:1px solid #ccc;
+      border-radius:var(--radius);
+      font-size:15px;
+      font-family:inherit;
+    }
+    input:focus,select:focus,textarea:focus{
+      outline:none;
+      border-color:var(--purple);
+      box-shadow:0 0 0 2px rgba(75,0,181,0.1);
+    }
+    .btn{
+      width:100%;
+      padding:14px;
+      font-size:16px;
+      font-weight:600;
+      background:var(--purple);
+      color:#fff;
+      border:none;
+      border-radius:var(--radius);
+      cursor:pointer;
+      transition:0.2s;
+    }
+    .btn:hover{background:#370090;}
+
+    /* Bottom Nav */
+    .bottom-nav{
+      position:fixed;
+      bottom:0;left:0;right:0;
+      background:var(--purple);
+      display:flex;
+      justify-content:space-around;
+      padding:10px 0;
+      color:#fff;
+    }
+    .bottom-nav a{
+      text-align:center;
+      font-size:13px;
+      text-decoration:none;
+      color:inherit;
+      flex:1;
+      padding:6px 0;
+    }
+    .bottom-nav i{
+      font-size:18px;
+      display:block;
+      margin-bottom:3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <img src="images/logo.png" alt="Teeru logo">
+      <span>Teeru</span>
+    </div>
+    <div class="controls">
+      <!-- Notification (inline SVG bell) -->
+      <a href="notification.html" title="Notifications" aria-label="Notifications">
+  <button class="notification">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L3 17h5"></path>
+      <path d="M13.7 20a2.5 2.5 0 01-3.4 0"></path>
+    </svg>
+    <span class="badge" aria-hidden="true">3</span>
+  </button>
+  </header>
+
+  <!-- Form -->
+  <main class="main">
+    <h1><i class="fa-solid fa-plus"></i> Add Expense</h1>
+
+    <form>
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" id="date">
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="">-- Select Category --</option>
+          <option>Food</option>
+          <option>Transport</option>
+          <option>Shopping</option>
+          <option>Entertainment</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="amount">Amount (Nu.)</label>
+        <input type="number" id="amount" placeholder="e.g. 200">
+      </div>
+
+      <div class="form-group">
+        <label for="note">Note (Optional)</label>
+        <textarea id="note" rows="3" placeholder="Add a short note..."></textarea>
+      </div>
+
+      <button class="btn" type="submit">💾 Save Expense</button>
+    </form>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="add-expense.html"><i class="fa-solid fa-plus-square"></i>Add</a>
+    <a href="Reports.html"><i class="fa-solid fa-chart-pie"></i>Reports</a>
+    <a href="Expenses.html"><i class="fa-solid fa-receipt"></i>Expenses</a>
+    <a href="settings.html"><i class="fa-solid fa-gear"></i>Settings</a>
+  </nav>
+
+</body>
+</html>

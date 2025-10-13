@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teeru - Settings</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        header { background-color: #5B2EE6; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        header img { height: 30px; }
+        main { padding: 20px; }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        input, select, button { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; border-radius: 5px; border: 1px solid #ccc; }
+        button { background-color: #6C5DD3; color: white; border: none; cursor: pointer; margin-top: 20px; }
+        .about { margin-top: 20px; font-size: 14px; color: #555; border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
+        nav { position: fixed; bottom: 0; width: 100%; background-color: #5B2EE6; display: flex; justify-content: space-around; padding: 10px 0; }
+        nav a { color: white; text-decoration: none; font-weight: bold; }
+        .container { max-width: 400px; margin: auto; }
+    </style>
+</head>
+<body>
+    <header>
+        <div><img src="https://via.placeholder.com/30/ffffff?text=T" alt="Logo"> Teeru</div>
+        <div><img src="https://via.placeholder.com/25/ffffff?text=🔔" alt="Notification"></div>
+    </header>
+
+    <main class="container">
+        <h2>Setting</h2>
+        <label for="budget">Monthly Budget (Nu.)</label>
+        <input type="number" id="budget" value="3000">
+
+        <label for="language">Language</label>
+        <select id="language">
+            <option value="english" selected>English</option>
+            <option value="dzongkha">Dzongkha</option>
+        </select>
+
+        <label for="export">Export</label>
+        <button id="export">Export CSV</button>
+
+        <div class="about">
+            <p>About</p>
+            <p>Teeru – Expense Tracker<br>Version 1.0 (Prototype Version)</p>
+        </div>
+    </main>
+
+    <nav class="bottom-nav">
+    <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="add-expense.html"><i class="fa-solid fa-plus-square"></i>Add</a>
+    <a href="Reports.html"><i class="fa-solid fa-chart-pie"></i>Reports</a>
+    <a href="Expenses.html"><i class="fa-solid fa-receipt"></i>Expenses</a>
+    <a href="settings.html"><i class="fa-solid fa-gear"></i>Settings</a>
+  </nav>
+</body>
+</html>

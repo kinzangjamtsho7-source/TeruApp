@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Teeru — Reports</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      --purple:#4b00b5;
+      --radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Segoe UI",Roboto,Arial,sans-serif;
+      background:#fff;
+      color:#222;
+    }
+
+    /* Header */
+    .header{
+      background:var(--purple);
+      color:#fff;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:700;
+      font-size:20px;
+    }
+    .logo img{
+      width:40px;height:40px;
+      border-radius:10px;
+      border:2px solid rgba(255,255,255,0.85);
+    }
+    .controls{display:flex;align-items:center;gap:12px;}
+    .notification{position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:rgba(255,255,255,0.1);cursor:pointer;}
+    .notification .badge{position:absolute;top:-5px;right:-5px;background:#ff3b30;color:#fff;font-size:11px;padding:2px 6px;border-radius:999px;border:2px solid var(--purple);font-weight:700;}
+    .avatar{width:34px;height:34px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,0.2);}
+    .avatar img{width:100%;height:100%;object-fit:cover;}
+
+    /* Main Content */
+    .main{
+      padding:22px;
+      margin-bottom:90px;
+      max-width:800px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+    h1{
+      font-size:22px;
+      margin-bottom:20px;
+      text-align:center;
+    }
+    .chart-card{
+      background:#f9f9f9;
+      padding:18px;
+      border-radius:var(--radius);
+      border:1px solid #eee;
+      margin-bottom:20px;
+    }
+    canvas{width:100%!important;height:300px!important;}
+
+    /* Bottom Nav */
+    .bottom-nav{
+      position:fixed;
+      bottom:0;left:0;right:0;
+      background:var(--purple);
+      display:flex;
+      justify-content:space-around;
+      padding:10px 0;
+      color:#fff;
+    }
+    .bottom-nav a{
+      text-align:center;
+      font-size:13px;
+      text-decoration:none;
+      color:inherit;
+      flex:1;
+      padding:6px 0;
+    }
+    .bottom-nav i{
+      font-size:18px;
+      display:block;
+      margin-bottom:3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <img src="images/logo.png" alt="Teeru logo">
+      <span>Teeru</span>
+    </div>
+    <div class="controls">
+      <!-- Notification (inline SVG bell) -->
+      <a href="notification.html" title="Notifications" aria-label="Notifications">
+  <button class="notification">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L3 17h5"></path>
+      <path d="M13.7 20a2.5 2.5 0 01-3.4 0"></path>
+    </svg>
+    <span class="badge" aria-hidden="true">3</span>
+  </button>
+  </header>
+
+  <!-- Main -->
+  <main class="main">
+    <h1><i class="fa-solid fa-chart-pie"></i> Reports</h1>
+
+    <div class="chart-card">
+      <h3>Expenses by Category</h3>
+      <canvas id="categoryChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h3>Expenses Over Time</h3>
+      <canvas id="timeChart"></canvas>
+    </div>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="add-expense.html"><i class="fa-solid fa-plus-square"></i>Add</a>
+    <a href="Reports.html"><i class="fa-solid fa-chart-pie"></i>Reports</a>
+    <a href="Expenses.html"><i class="fa-solid fa-receipt"></i>Expenses</a>
+    <a href="settings.html"><i class="fa-solid fa-gear"></i>Settings</a>
+  </nav>
+
+  <!-- Charts Script -->
+  <script>
+    // Pie Chart - Category
+    const ctx1 = document.getElementById('categoryChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'pie',
+      data: {
+        labels: ['Food', 'Transport', 'Shopping', 'Entertainment', 'Other'],
+        datasets: [{
+          data: [250, 120, 800, 300, 150],
+          backgroundColor: ['#ff6b6b','#4dabf7','#ffa94d','#845ef7','#868e96']
+        }]
+      }
+    });
+
+    // Bar Chart - Over Time
+    const ctx2 = document.getElementById('timeChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['Sep 28','Sep 29','Sep 30','Oct 1'],
+        datasets: [{
+          label: 'Daily Expenses (Nu.)',
+          data: [300, 800, 120, 250],
+          backgroundColor: '#4b00b5'
+        }]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

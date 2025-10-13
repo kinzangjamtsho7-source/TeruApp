@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teeru - Notification</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        header { background-color: #5B2EE6; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        header img { height: 30px; }
+        main { padding: 20px; }
+        .notification { border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px; }
+        .warning { background-color: #FFF4E5; border-color: #FFCC00; }
+        .error { background-color: #FFE5E5; border-color: #FF4D4D; }
+        .info { background-color: #E5F0FF; border-color: #3399FF; }
+        nav { position: fixed; bottom: 0; width: 100%; background-color: #5B2EE6; display: flex; justify-content: space-around; padding: 10px 0; }
+        nav a { color: white; text-decoration: none; font-weight: bold; }
+        .container { max-width: 400px; margin: auto; }
+    </style>
+</head>
+<body>
+    <header>
+        <div><img src="https://via.placeholder.com/30/ffffff?text=T" alt="Logo"> Teeru</div>
+        <div><img src="https://via.placeholder.com/25/ffffff?text=🔔" alt="Notification"></div>
+    </header>
+
+    <main class="container">
+        <h2>Notification</h2>
+        <div class="notification warning">⚠️ You've used 80% of your monthly budget.</div>
+        <div class="notification error">❌ Over budget! You have exceeded your monthly limit.</div>
+        <div class="notification info">ℹ️ Tip: Review your spending categories to save money.</div>
+    </main>
+
+    <nav class="bottom-nav">
+    <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="add-expense.html"><i class="fa-solid fa-plus-square"></i>Add</a>
+    <a href="Reports.html"><i class="fa-solid fa-chart-pie"></i>Reports</a>
+    <a href="Expenses.html"><i class="fa-solid fa-receipt"></i>Expenses</a>
+    <a href="settings.html"><i class="fa-solid fa-gear"></i>Settings</a>
+  </nav>
+</body>
+</html>
