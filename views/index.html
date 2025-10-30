@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Teeru — Home</title>
+  <title>Teeru — Home (Ads Fixed)</title>
 
   <style>
     :root{
@@ -37,12 +37,11 @@
 
     /* Right controls */
     .controls{display:flex;align-items:center;gap:12px}
+    .logout{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.25);padding:8px 12px;border-radius:8px;text-decoration:none}
+    .logout:hover{background:rgba(255,255,255,0.18)}
     .notification{
-      position:relative;
-      width:44px;height:44px;
-      display:inline-flex;align-items:center;justify-content:center;
-      border-radius:10px;background:rgba(255,255,255,0.08);
-      cursor:pointer;transition:transform .12s ease;border:none;outline:none;
+      position:relative;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;
+      border-radius:10px;background:rgba(255,255,255,0.08);cursor:pointer;transition:transform .12s ease;border:none;outline:none;
     }
     .notification:hover{transform:translateY(-2px)}
     .notification .badge{
@@ -50,8 +49,6 @@
       font-size:11px;padding:3px 6px;border-radius:999px;border:2px solid var(--purple);
       font-weight:700;line-height:1;
     }
-    .avatar{width:36px;height:36px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,0.15)}
-    .avatar img{width:100%;height:100%;object-fit:cover}
 
     /* Main menu */
     .main{padding:20px;max-width:760px;margin:18px auto}
@@ -68,54 +65,104 @@
     .menu-item:hover{box-shadow:0 6px 20px rgba(75,0,181,0.08);transform:translateY(-4px);border-color:var(--purple)}
 
     .item-icon{width:52px;height:52px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;background:var(--purple-100);color:var(--purple);font-size:20px;flex-shrink:0}
-    .item-icon svg{width:24px;height:24px;display:block}
     .item-content{flex:1;display:flex;flex-direction:column}
     .item-title{font-size:16px;font-weight:600}
     .item-sub{font-size:13px;color:var(--muted);margin-top:4px}
     .chev{color:#bdbdd3;font-size:14px;margin-left:8px;display:flex;align-items:center}
-    .chev svg{width:14px;height:14px}
 
-    .ads{position:fixed;left:0;right:0;bottom:0;background:var(--purple);color:#fff;padding:12px 16px;text-align:center;font-weight:700;font-size:15px;border-top-left-radius:10px;border-top-right-radius:10px}
+    /* Advertisement Section (Full width + perfect height) */
+.ads {
+  position: relative;
+  width: 100%;
+  margin-top: 24px;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
 
+.ads-wrap {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.ads a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.ads-card {
+  width: 100%;
+  height: 220px; /* ✅ perfect proportional height */
+  border-radius: 14px;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.ads-fallback {
+  padding: 12px;
+  color: #666;
+  font-size: 15px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .ads-card {
+    height: 160px; /* slightly shorter on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .ads-card {
+    height: 140px;
+  }
+  
     @media (max-width:520px){
       .main{padding:14px;margin:12px}
       .item-icon{width:46px;height:46px;font-size:16px}
+      .ads-card{height:140px;max-height:28vh}
     }
   </style>
 </head>
 <body>
   <header class="header" role="banner">
     <div class="logo" aria-hidden="false">
-      <!-- replace logo.png with your logo file -->
-      <img src="images/logo.png" alt="Teeru logo">
+      <img src="/images/logo.png" alt="Teeru logo">
       <span>Teeru</span>
     </div>
 
     <div class="controls" aria-hidden="false">
-      <!-- Notification (inline SVG bell) -->
-      <a href="notification.html" title="Notifications" aria-label="Notifications">
-  <button class="notification">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L3 17h5"></path>
-      <path d="M13.7 20a2.5 2.5 0 01-3.4 0"></path>
-    </svg>
-    <span class="badge" aria-hidden="true">3</span>
-  </button>
-</a>
+      <a href="/notifications" title="Notifications" aria-label="Notifications">
+        <button class="notification">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L3 17h5"></path>
+            <path d="M13.7 20a2.5 2.5 0 01-3.4 0"></path>
+          </svg>
+          <span class="badge" aria-hidden="true">3</span>
+        </button>
+      </a>
 
+      <a class="logout" href="/logout">Logout</a>
+    </div>
   </header>
 
   <main class="main" role="main">
     <div class="welcome">
-      <h1>Hello, Kinzang 👋</h1>
-      <div class="balance">Wallet: <strong>Nu. 4,350</strong></div>
+      <h1 id="greeting">Hello 👋</h1>
+      <div class="balance">Wallet: <strong id="walletAmount">Nu. 0</strong></div>
     </div>
 
     <nav class="menu" aria-label="Primary navigation">
-      <a class="menu-item" href="add-expense.html">
+      <a class="menu-item" href="/add-expense">
         <div class="item-icon" aria-hidden="true">
-          <!-- plus -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 5v14M5 12h14"></path>
           </svg>
@@ -131,9 +178,8 @@
         </div>
       </a>
 
-      <a class="menu-item" href="expenses.html">
+      <a class="menu-item" href="/expenses">
         <div class="item-icon" aria-hidden="true">
-          <!-- receipt/document -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 2h6l3 3v15a1 1 0 01-1 1H5a1 1 0 01-1-1V3a1 1 0 011-1h4z"></path>
             <path d="M9 7h6M9 12h6M9 17h3"></path>
@@ -150,9 +196,8 @@
         </div>
       </a>
 
-      <a class="menu-item" href="reports.html">
+      <a class="menu-item" href="/reports">
         <div class="item-icon" aria-hidden="true">
-          <!-- pie chart -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12A9 9 0 1112 3v9z"></path>
             <path d="M12 12V3"></path>
@@ -169,9 +214,8 @@
         </div>
       </a>
 
-      <a class="menu-item" href="settings.html">
+      <a class="menu-item" href="/settings">
         <div class="item-icon" aria-hidden="true">
-          <!-- gear -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12.9v-1.8l-2-.4a8.1 8.1 0 00-.8-2l1-1.6-1.4-1.4-1.6 1a8.1 8.1 0 00-2-.8l-.4-2h-1.8l-.4 2a8.1 8.1 0 00-2 .8l-1.6-1-1.4 1.4 1 1.6a8.1 8.1 0 00-.8 2l-2 .4v1.8l2 .4c.1.7.3 1.4.8 2l-1 1.6 1.4 1.4 1.6-1c.6.4 1.3.6 2 .8l.4 2h1.8l.4-2c.7-.1 1.4-.3 2-.8l1.6 1 1.4-1.4-1-1.6c.5-.6.7-1.3.8-2l2-.4z"></path>
             <circle cx="12" cy="12" r="3"></circle>
@@ -190,6 +234,66 @@
     </nav>
   </main>
 
-  <div class="ads" role="contentinfo">Advertisement</div>
+  <!-- Robust ad: background-image applied AFTER image loads -->
+  <div class="ads" role="contentinfo" aria-label="Sponsored">
+    <div class="ads-wrap">
+      <a id="ad-link" href="/advertisement" rel="noopener noreferrer">
+        <div id="adsCard" class="ads-card" role="img" aria-label="Advertisement card">
+          <div id="adFallback" class="ads-fallback">Advertisement</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    (async function init() {
+      try {
+        const res = await fetch('/api/users/me/budget', { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          const amount = Number(data.monthlyBudget || 0);
+          const el = document.getElementById('walletAmount');
+          if (el) {
+            el.textContent = 'Nu. ' + amount.toLocaleString(undefined, { minimumFractionDigits: 0 });
+          }
+        }
+      } catch (e) {
+        // fail silently
+      }
+    })();
+
+    (function loadAdBackground() {
+      const adsCard = document.getElementById('adsCard');
+      const adFallback = document.getElementById('adFallback');
+      const adLink = document.getElementById('ad-link');
+
+      // Path to your ad image
+      const adPath = '/images/Advertisement.jpg';
+
+      // Preload the image using JS
+      const img = new Image();
+      img.onload = function () {
+        // Apply as background only after it loads
+        adsCard.style.backgroundImage = 'url("' + adPath + '")';
+        adsCard.classList.add('has-image');
+        // hide fallback text (keeps accessible label)
+        if (adFallback) adFallback.style.display = 'none';
+        // set link (if you want to track click to another url, change here)
+        adLink.href = '/advertisement';
+      };
+      img.onerror = function () {
+        // Keep fallback visible if image fails to load
+        if (adFallback) {
+          adFallback.style.display = 'block';
+          adFallback.textContent = 'Advertisement';
+        }
+        // ensure no broken background
+        adsCard.style.backgroundImage = '';
+      };
+
+      // Start loading
+      img.src = adPath;
+    })();
+  </script>
 </body>
 </html>

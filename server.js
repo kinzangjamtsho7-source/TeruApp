@@ -5,8 +5,10 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const { sequelize, User } = require('./models');
 const bcrypt = require('bcrypt');
 const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const expenseRoutes = require('./routes/expenseRoutes');
+const reportRoutes = require('./routes/reportRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,8 +18,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
-// View engine
+// View engine and views dir
 app.set('view engine', 'ejs');
+app.set('views', 'views');
 
 // Session configuration
 const sessionStore = new SequelizeStore({
@@ -43,8 +46,10 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/', authRoutes);
-app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
+app.use('/api/expenses', expenseRoutes);
+app.use('/api/reports', reportRoutes);
+app.use('/api/users', userRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {

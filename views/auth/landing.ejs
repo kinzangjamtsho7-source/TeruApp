@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teeru – Expense Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f9f9ff;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background-color: #5B2EE6;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(to bottom right, #5B2EE6, #8667F2);
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 60px 40px;
+            background-color: #fff;
+        }
+
+        .feature-card {
+            text-align: center;
+            background: #f6f4ff;
+            border-radius: 15px;
+            padding: 30px 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: #5B2EE6;
+            margin-bottom: 10px;
+        }
+
+        /* About Section */
+        .about {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #f9f9ff;
+        }
+
+        .about h2 {
+            color: #5B2EE6;
+            margin-bottom: 20px;
+        }
+
+        .about p {
+            max-width: 600px;
+            margin: auto;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #5B2EE6;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="/images/logo.png" alt="Teeru Logo">
+            <h2>Teeru</h2>
+        </div>
+        <nav>
+            <a href="/login">Log In</a>
+            <a href="/signup">Sign Up</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Take Control of Your Expenses</h1>
+        <p>Teeru helps you track, manage, and save smarter. Start your financial journey today.</p>
+    </section>
+
+    <section class="features" id="features">
+        <div class="feature-card">
+            <h3>💰 Budget Tracking</h3>
+            <p>Set your monthly budget and get instant alerts when you’re nearing the limit.</p>
+        </div>
+        <div class="feature-card">
+            <h3>📊 Expense Reports</h3>
+            <p>View detailed reports of your spending habits and manage your finances effectively.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🔔 Smart Notifications</h3>
+            <p>Get timely reminders and spending tips to stay within your budget.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🌍 Multi-language</h3>
+            <p>Choose between English and Dzongkha for a personalized experience.</p>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <h2>About Teeru</h2>
+        <p>
+            Teeru is a simple yet powerful expense tracker designed for everyone who wants to manage their personal finances effectively. 
+            Track your expenses, set goals, and make smarter spending decisions with real-time notifications and insightful reports.
+        </p>
+    </section>
+
+    <footer>
+        © 2025 Teeru – Expense Tracker | Version 1.0 Prototype
+    </footer>
+</body>
+</html>

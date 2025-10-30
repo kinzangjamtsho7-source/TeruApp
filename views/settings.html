@@ -4,30 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teeru - Settings</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        header { background-color: #5B2EE6; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        header img { height: 30px; }
-        main { padding: 20px; }
-        label { font-weight: bold; display: block; margin-top: 15px; }
-        input, select, button { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; border-radius: 5px; border: 1px solid #ccc; }
-        button { background-color: #6C5DD3; color: white; border: none; cursor: pointer; margin-top: 20px; }
-        .about { margin-top: 20px; font-size: 14px; color: #555; border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
-        nav { position: fixed; bottom: 0; width: 100%; background-color: #5B2EE6; display: flex; justify-content: space-around; padding: 10px 0; }
-        nav a { color: white; text-decoration: none; font-weight: bold; }
-        .container { max-width: 400px; margin: auto; }
+      :root{ --purple:#4b00b5; --purple-100:#f5f0ff; --muted:#6b6b7a; --radius:12px; }
+      *{ box-sizing:border-box }
+      body{ margin:0; font-family:"Segoe UI", Roboto, Arial, sans-serif; background:#fff; color:#222; -webkit-font-smoothing:antialiased; }
+
+      /* Header (match other pages) */
+      .header{ background:var(--purple); color:#fff; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+      .logo{ display:flex; align-items:center; gap:12px; font-weight:700; font-size:20px; }
+      .logo img{ width:40px; height:40px; border-radius:10px; border:2px solid rgba(255,255,255,0.85); object-fit:cover }
+      .controls{ display:flex; align-items:center; gap:12px }
+      .notification{ position:relative; width:40px; height:40px; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; background:rgba(255,255,255,0.1); cursor:pointer; border:none; outline:none }
+      .notification .badge{ position:absolute; top:-5px; right:-5px; background:#ff3b30; color:#fff; font-size:11px; padding:2px 6px; border-radius:999px; border:2px solid var(--purple); font-weight:700; line-height:1 }
+      .logout{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.25);padding:8px 12px;border-radius:8px;text-decoration:none}
+      .logout:hover{background:rgba(255,255,255,0.18)}
+
+      /* Main */
+      main{ padding:20px }
+      label{ display:block; margin-top:15px; font-weight:600; }
+      input, select, button{ width:100%; padding:12px 14px; border:1px solid #ccc; border-radius:var(--radius); font-size:15px; font-family:inherit }
+      button{ background:var(--purple); color:#fff; border:none; margin-top:20px; cursor:pointer }
+      .about{ margin-top:20px; font-size:14px; color:#555; border:1px solid #ccc; padding:10px; border-radius:var(--radius) }
+
+      /* Budget Reminder Styles */
+      .budget-reminder {
+        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+        border: 1px solid #ffc107;
+        border-radius: var(--radius);
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+      }
+      .reminder-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .reminder-content i {
+        color: #ff8c00;
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+      .reminder-text {
+        flex: 1;
+      }
+      .reminder-text strong {
+        color: #856404;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .reminder-text p {
+        margin: 0;
+        color: #856404;
+        font-size: 14px;
+      }
+
+      /* Bottom nav (match other pages) */
+      .bottom-nav{ position:fixed; bottom:0; left:0; right:0; background:var(--purple); display:flex; justify-content:space-around; padding:10px 0; color:#fff }
+      .bottom-nav a{ text-align:center; font-size:13px; text-decoration:none; color:inherit; flex:1; padding:6px 0 }
+      .bottom-nav i{ font-size:18px; display:block; margin-bottom:3px }
     </style>
 </head>
 <body>
-    <header>
-        <div><img src="https://via.placeholder.com/30/ffffff?text=T" alt="Logo"> Teeru</div>
-        <div><img src="https://via.placeholder.com/25/ffffff?text=🔔" alt="Notification"></div>
+    <header class="header">
+      <div class="logo">
+        <img src="/images/logo.png" alt="Teeru logo">
+        <span>Teeru</span>
+      </div>
+      <div class="controls">
+        <a href="/notifications" title="Notifications" aria-label="Notifications">
+  <button class="notification">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L3 17h5"></path>
+      <path d="M13.7 20a2.5 2.5 0 01-3.4 0"></path>
+    </svg>
+    <span class="badge" aria-hidden="true">3</span>
+  </button>
+        </a>
+        <a class="logout" href="/logout">Logout</a>
+      </div>
     </header>
 
     <main class="container">
         <h2>Setting</h2>
+        
+        <!-- Monthly Budget Renewal Reminder -->
+        <div id="budgetReminder" class="budget-reminder" style="display: none;">
+          <div class="reminder-content">
+            <i class="fa-solid fa-calendar-days"></i>
+            <div class="reminder-text">
+              <strong>Monthly Budget Renewal</strong>
+              <p>Your monthly budget was set on <span id="budgetDate"></span>. Consider renewing it for the new month!</p>
+            </div>
+          </div>
+        </div>
+
         <label for="budget">Monthly Budget (Nu.)</label>
-        <input type="number" id="budget" value="3000">
+        <input type="number" id="budget" min="0" step="1" placeholder="Enter monthly budget">
 
         <label for="language">Language</label>
         <select id="language">
@@ -37,6 +113,7 @@
 
         <label for="export">Export</label>
         <button id="export">Export CSV</button>
+        <button id="saveBudget">Save Budget</button>
 
         <div class="about">
             <p>About</p>
@@ -45,11 +122,118 @@
     </main>
 
     <nav class="bottom-nav">
-    <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
-    <a href="add-expense.html"><i class="fa-solid fa-plus-square"></i>Add</a>
-    <a href="Reports.html"><i class="fa-solid fa-chart-pie"></i>Reports</a>
-    <a href="Expenses.html"><i class="fa-solid fa-receipt"></i>Expenses</a>
-    <a href="settings.html"><i class="fa-solid fa-gear"></i>Settings</a>
+    <a href="/home"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="/add-expense"><i class="fa-solid fa-plus-square"></i>Add</a>
+    <a href="/reports"><i class="fa-solid fa-chart-pie"></i>Reports</a>
+    <a href="/expenses"><i class="fa-solid fa-receipt"></i>Expenses</a>
+    <a href="/settings"><i class="fa-solid fa-gear"></i>Settings</a>
   </nav>
+  <script>
+    async function fetchBudget() {
+      try {
+        const res = await fetch('/api/users/me/budget', { credentials: 'include' });
+        if (!res.ok) return;
+        const data = await res.json();
+        const input = document.getElementById('budget');
+        if (input) input.value = Number(data.monthlyBudget || 0);
+        
+        // Check if budget needs renewal (older than 30 days)
+        if (data.budgetSetDate) {
+          checkBudgetRenewal(data.budgetSetDate);
+        }
+      } catch (_) {}
+    }
+
+    function checkBudgetRenewal(budgetSetDate) {
+      const setDate = new Date(budgetSetDate);
+      const now = new Date();
+      const daysDiff = Math.floor((now - setDate) / (1000 * 60 * 60 * 24));
+      
+      // Show reminder if budget was set more than 30 days ago
+      if (daysDiff >= 30) {
+        const reminder = document.getElementById('budgetReminder');
+        const budgetDateSpan = document.getElementById('budgetDate');
+        
+        if (reminder && budgetDateSpan) {
+          budgetDateSpan.textContent = setDate.toLocaleDateString();
+          reminder.style.display = 'block';
+        }
+      }
+    }
+
+    document.getElementById("export")?.addEventListener("click", exportCSV);
+
+  async function exportCSV() {
+    try {
+      // Fetch expense data from API
+      const res = await fetch('/api/expenses', { credentials: 'include' });
+      if (!res.ok) {
+        alert("Failed to fetch expense data!");
+        return;
+      }
+      
+      const expenses = await res.json();
+      if (!expenses || expenses.length === 0) {
+        alert("No expense data found to export!");
+        return;
+      }
+
+      // Create CSV header
+      let csv = ['Title,Amount,Category,Date'];
+      
+      // Add expense data rows
+      for (let expense of expenses) {
+        const title = `"${(expense.title || '').replace(/"/g, '""')}"`;
+        const amount = expense.amount || 0;
+        const category = `"${(expense.category || 'Uncategorized').replace(/"/g, '""')}"`;
+        const date = expense.date || '';
+        csv.push(`${title},${amount},${category},${date}`);
+      }
+
+      // Convert to Blob and trigger download
+      const blob = new Blob([csv.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Teeru_Expense_Report.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      alert("CSV file exported successfully!");
+    } catch (error) {
+      console.error('Export error:', error);
+      alert("Failed to export CSV file!");
+    }
+  }
+
+    async function saveBudget() {
+      const input = document.getElementById('budget');
+      const value = Number(input && input.value ? input.value : 0);
+      if (!Number.isFinite(value) || value < 0) return;
+      try {
+        await fetch('/api/users/me/budget', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ monthlyBudget: value })
+        });
+        
+        // Hide the reminder when budget is updated
+        const reminder = document.getElementById('budgetReminder');
+        if (reminder) {
+          reminder.style.display = 'none';
+        }
+        
+        alert('Budget updated successfully!');
+      } catch (_) {
+        alert('Failed to update budget!');
+      }
+    }
+
+    document.getElementById('saveBudget')?.addEventListener('click', saveBudget);
+    fetchBudget();
+  </script>
 </body>
 </html>

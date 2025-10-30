@@ -17,18 +17,4 @@ const sequelize = new Sequelize(
   }
 );
 
-const [results, metadata] = await sequelize.query(`SELECT column_name FROM information_schema.columns WHERE table_name = 'Users'`);
-console.log(results);
-
-
-// Test the connection
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('✅ Database connection has been established successfully.');
-  })
-  .catch(err => {
-    console.error('❌ Unable to connect to the database:', err);
-  });
-
 module.exports = sequelize;

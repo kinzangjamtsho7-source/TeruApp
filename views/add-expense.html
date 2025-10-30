@@ -53,6 +53,8 @@
     .notification .badge{position:absolute;top:-5px;right:-5px;background:#ff3b30;color:#fff;font-size:11px;padding:2px 6px;border-radius:999px;border:2px solid var(--purple);font-weight:700;}
     .avatar{width:34px;height:34px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,0.2);}
     .avatar img{width:100%;height:100%;object-fit:cover;}
+    .logout{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.25);padding:8px 12px;border-radius:8px;text-decoration:none}
+    .logout:hover{background:rgba(255,255,255,0.18)}
 
     /* Main form */
     .main{
@@ -131,12 +133,12 @@
   <!-- Header -->
   <header class="header">
     <div class="logo">
-      <img src="images/logo.png" alt="Teeru logo">
+      <img src="/images/logo.png" alt="Teeru logo">
       <span>Teeru</span>
     </div>
     <div class="controls">
       <!-- Notification (inline SVG bell) -->
-      <a href="notification.html" title="Notifications" aria-label="Notifications">
+      <a href="/notifications" title="Notifications" aria-label="Notifications">
   <button class="notification">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -145,13 +147,16 @@
     </svg>
     <span class="badge" aria-hidden="true">3</span>
   </button>
+      </a>
+      <a class="logout" href="/logout">Logout</a>
+    </div>
   </header>
 
   <!-- Form -->
   <main class="main">
     <h1><i class="fa-solid fa-plus"></i> Add Expense</h1>
 
-    <form>
+    <form id="add-expense-form">
       <div class="form-group">
         <label for="date">Date</label>
         <input type="date" id="date">
@@ -175,8 +180,8 @@
       </div>
 
       <div class="form-group">
-        <label for="note">Note (Optional)</label>
-        <textarea id="note" rows="3" placeholder="Add a short note..."></textarea>
+        <label for="title">Title</label>
+        <input id="title" placeholder="e.g. Lunch">
       </div>
 
       <button class="btn" type="submit">💾 Save Expense</button>
@@ -185,12 +190,17 @@
 
   <!-- Bottom Navigation -->
   <nav class="bottom-nav">
-    <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
-    <a href="add-expense.html"><i class="fa-solid fa-plus-square"></i>Add</a>
-    <a href="Reports.html"><i class="fa-solid fa-chart-pie"></i>Reports</a>
-    <a href="Expenses.html"><i class="fa-solid fa-receipt"></i>Expenses</a>
-    <a href="settings.html"><i class="fa-solid fa-gear"></i>Settings</a>
+    <a href="/home"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="/add-expense"><i class="fa-solid fa-plus-square"></i>Add</a>
+    <a href="/reports"><i class="fa-solid fa-chart-pie"></i>Reports</a>
+    <a href="/expenses"><i class="fa-solid fa-receipt"></i>Expenses</a>
+    <a href="/settings"><i class="fa-solid fa-gear"></i>Settings</a>
   </nav>
+
+  <script src="/js/expense.js"></script>
+  <script>
+    document.querySelector('#add-expense-form').addEventListener('submit', addExpense);
+  </script>
 
 </body>
 </html>

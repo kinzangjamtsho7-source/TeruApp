@@ -5,38 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teeru - Notification</title>
     <style>
+        :root{ --purple:#4b00b5; --purple-100:#f5f0ff; --muted:#6b6b7a; --radius:12px; }
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        header { background-color: #5B2EE6; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        header img { height: 30px; }
+        .header { background-color: var(--purple); color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap:12px; }
+        .left { display:flex; align-items:center; gap:12px }
+        .back { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:8px; background:rgba(255,255,255,0.12); color:#fff; text-decoration:none }
+        .logo { display:flex; align-items:center; gap:10px; font-weight:700; font-size:18px }
+        .logo img { height:32px; width:32px; border-radius:8px; border:2px solid rgba(255,255,255,0.85); object-fit:cover }
         main { padding: 20px; }
         .notification { border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px; }
         .warning { background-color: #FFF4E5; border-color: #FFCC00; }
         .error { background-color: #FFE5E5; border-color: #FF4D4D; }
         .info { background-color: #E5F0FF; border-color: #3399FF; }
-        nav { position: fixed; bottom: 0; width: 100%; background-color: #5B2EE6; display: flex; justify-content: space-around; padding: 10px 0; }
+        nav { position: fixed; bottom: 0; width: 100%; background-color: var(--purple); display: flex; justify-content: space-around; padding: 10px 0; }
         nav a { color: white; text-decoration: none; font-weight: bold; }
         .container { max-width: 400px; margin: auto; }
+        .logout{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.25);padding:8px 12px;border-radius:8px;text-decoration:none}
+        .logout:hover{background:rgba(255,255,255,0.18)}
     </style>
 </head>
 <body>
-    <header>
-        <div><img src="https://via.placeholder.com/30/ffffff?text=T" alt="Logo"> Teeru</div>
-        <div><img src="https://via.placeholder.com/25/ffffff?text=🔔" alt="Notification"></div>
+    <header class="header">
+        <div class="left">
+            <a class="back" href="/home" title="Back" aria-label="Back">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M15 18l-6-6 6-6"></path>
+                </svg>
+            </a>
+            <div class="logo">
+                <img src="/images/logo.png" alt="Teeru logo">
+                <span>Teeru</span>
+            </div>
+        </div>
+        <a class="logout" href="/logout">Logout</a>
     </header>
 
     <main class="container">
         <h2>Notification</h2>
-        <div class="notification warning">⚠️ You've used 80% of your monthly budget.</div>
-        <div class="notification error">❌ Over budget! You have exceeded your monthly limit.</div>
-        <div class="notification info">ℹ️ Tip: Review your spending categories to save money.</div>
+        <div id="notif-list"></div>
     </main>
 
     <nav class="bottom-nav">
-    <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
-    <a href="add-expense.html"><i class="fa-solid fa-plus-square"></i>Add</a>
-    <a href="Reports.html"><i class="fa-solid fa-chart-pie"></i>Reports</a>
-    <a href="Expenses.html"><i class="fa-solid fa-receipt"></i>Expenses</a>
-    <a href="settings.html"><i class="fa-solid fa-gear"></i>Settings</a>
+    <a href="/home"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="/add-expense"><i class="fa-solid fa-plus-square"></i>Add</a>
+    <a href="/reports"><i class="fa-solid fa-chart-pie"></i>Reports</a>
+    <a href="/expenses"><i class="fa-solid fa-receipt"></i>Expenses</a>
+    <a href="/settings"><i class="fa-solid fa-gear"></i>Settings</a>
   </nav>
+  <script>
+    (async function loadBudgetNotifications(){
+      const list = document.getElementById('notif-list');
+      if (!list) return;
+      function push(msg, type){
+        const div = document.createElement('div');
+        div.className = `notification ${type}`;
+        div.textContent = msg;
+        list.appendChild(div);
+      }
+      try {
+        const [expRes, budRes] = await Promise.all([
+          fetch('/api/expenses', { credentials: 'include' }),
+          fetch('/api/users/me/budget', { credentials: 'include' })
+        ]);
+        if (!expRes.ok) return;
+        const expenses = await expRes.json();
+        const total = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+        let budget = 0;
+        if (budRes.ok) {
+          const budData = await budRes.json();
+          budget = Number(budData.monthlyBudget || 0);
+        }
+        if (budget > 0) {
+          const pct = Math.round((total / budget) * 100);
+          if (pct >= 100) {
+            push(`❌ Over budget! You used ${pct}% of your monthly limit (Nu. ${budget.toFixed(2)}).`, 'error');
+          } else if (pct >= 80) {
+            push(`⚠️ Warning: You've used ${pct}% of your monthly budget (Nu. ${budget.toFixed(2)}).`, 'warning');
+          } else {
+            push(`ℹ️ You have used ${pct}% of your monthly budget so far.`, 'info');
+          }
+        } else {
+          push('ℹ️ Set a monthly budget in Settings to receive usage alerts.', 'info');
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
+  </script>
 </body>
 </html>
