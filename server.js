@@ -92,8 +92,15 @@ async function startServer() {
     console.log('✅ DB connected');
 
     // Sync all models with database
-    await sequelize.sync({ alter: true });
+    // Using sync() without options will create tables if they don't exist
+    // For development, you can use { alter: true } to modify existing tables
+    // For production, use migrations instead
+    await sequelize.sync({ force: false });
     console.log('✅ Database tables synced');
+    
+    // List all synced tables
+    const tables = await sequelize.getQueryInterface().showAllTables();
+    console.log('📊 Tables in database:', tables.length > 0 ? tables.join(', ') : 'No tables found');
     
     // Create session table
     await sessionStore.sync();
@@ -107,7 +114,14 @@ async function startServer() {
       console.log(`🚀 Server running on http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.error('❌ Error starting server:', error);
+    console.error('❌ Error starting server:', error.message);
+    if (error.name === 'SequelizeConnectionError') {
+      console.error('💡 Make sure PostgreSQL is running and the database exists.');
+      console.error('💡 Create the database manually: CREATE DATABASE ' + (process.env.DB_NAME || 'college_feedback') + ';');
+    } else if (error.name === 'SequelizeDatabaseError') {
+      console.error('💡 Database error - check if the database "' + (process.env.DB_NAME || 'college_feedback') + '" exists.');
+    }
+    console.error('Full error:', error);
     process.exit(1);
   }
 }

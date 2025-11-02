@@ -20,6 +20,11 @@
 <body>
     <div class="container">
         <h2>Sign Up</h2>
+        <% if (error) { %>
+            <div style="background-color: #ffebee; color: #c62828; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                <%= error %>
+            </div>
+        <% } %>
         <form action="/signup" method="POST">
             <input type="text" name="fullName" placeholder="Full Name" required>
             <input type="email" name="email" placeholder="Email" required>

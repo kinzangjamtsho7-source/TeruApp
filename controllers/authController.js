@@ -14,6 +14,11 @@ exports.postSignup = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
 
+    // Validate input
+    if (!fullName || !email || !password) {
+      return res.status(400).render('auth/signup', { error: 'All fields are required' });
+    }
+
     const existing = await User.findOne({ where: { email } });
     if (existing) {
       return res.status(400).render('auth/signup', { error: 'Email already registered' });
@@ -33,17 +38,37 @@ exports.postSignup = async (req, res) => {
       otpExpiresAt
     });
 
-    await sendOtpEmail(email, otp);
+    // Send OTP email (non-blocking - don't let email failures prevent signup)
+    sendOtpEmail(email, otp).catch(err => {
+      console.error('Failed to send OTP email (user can still verify manually):', err);
+    });
 
+    // Set session before redirect
     req.session.pendingEmail = email;
-    return res.redirect('/verify-otp');
+    console.log('✅ User created, OTP generated, redirecting to verify-otp for:', email);
+    
+    // Save session explicitly before redirect
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.status(500).render('error', { message: 'Session error', error: err });
+      }
+      console.log('✅ Session saved, redirecting to /verify-otp');
+      return res.redirect('/verify-otp');
+    });
   } catch (error) {
     console.error('Signup error:', error);
-    return res.status(500).render('error', { message: 'Signup failed', error });
+    return res.status(500).render('auth/signup', { error: 'Signup failed. Please try again.' });
   }
 };
 
 exports.getVerifyOtp = (req, res) => {
+  const email = req.session.pendingEmail;
+  console.log('📧 GET /verify-otp - Pending email in session:', email || 'none');
+  if (!email) {
+    console.log('⚠️ No pending email in session, redirecting to signup');
+    return res.redirect('/signup');
+  }
   res.render('auth/verify-otp', { error: null });
 };
 
