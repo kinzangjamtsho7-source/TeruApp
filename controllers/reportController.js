@@ -3,6 +3,10 @@ const { Op } = require('sequelize');
 
 exports.getSummary = async (req, res) => {
   try {
+    // If no user session, return empty report
+    if (!req.session || !req.session.user || !req.session.user.id) {
+      return res.json({ byCategory: {}, byDate: {} });
+    }
     const userId = req.session.user.id;
     const expenses = await Expense.findAll({ where: { userId } });
 

@@ -6,80 +6,71 @@ const { isAuthenticated } = require('../middleware/authMiddleware');
 const bcrypt = require('bcryptjs');
 const { User } = require('../models');
 
-// Landing Page (optional)
+// Root route - redirect directly to home page
 router.get('/', (req, res) => {
-  res.render('auth/landing');
+  res.redirect('/home');
 });
 
 // Auth Routes
-router.get('/signup', authController.getSignup);
-router.post('/signup', authController.postSignup);
 router.get('/verify-otp', authController.getVerifyOtp);
 router.post('/verify-otp', authController.postVerifyOtp);
-router.get('/login', authController.getLogin);
-router.post('/login', authController.postLogin);
 router.get('/logout', authController.logout);
 
-// Protected Home - serve main HTML
-router.get('/home', isAuthenticated, (req, res) => {
+// Home page - accessible without authentication
+router.get('/home', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'index.html'));
 });
 
-// App pages (protected)
-router.get('/add-expense', isAuthenticated, (req, res) => {
+// App pages - accessible without authentication
+router.get('/add-expense', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'add-expense.html'));
 });
 
-router.get('/expenses', isAuthenticated, (req, res) => {
+router.get('/expenses', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'Expenses.html'));
 });
 
-router.get('/reports', isAuthenticated, (req, res) => {
+router.get('/reports', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'Reports.html'));
 });
 
-router.get('/settings', isAuthenticated, (req, res) => {
+router.get('/settings', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'settings.html'));
 });
 
 // Advertisement page
-router.get('/advertisement', isAuthenticated, (req, res) => {
+router.get('/advertisement', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'advertisement.html'));
 });
 
-router.get('/notifications', isAuthenticated, (req, res) => {
+router.get('/notifications', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'notification.html'));
 });
 
-// Admin login page
+// Admin routes (keep admin login for admin panel only)
 router.get('/admin', (req, res) => {
   res.render('auth/admin-login', { error: null });
 });
 
-// Handle admin login
+// Handle admin login (for admin panel only)
 router.post('/admin/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if it's the admin email from .env
-    if (email !== process.env.ADMIN_EMAIL) {
+    const user = await User.findOne({ where: { email, role: 'admin' } });
+    if (!user) {
       return res.render('auth/admin-login', { error: 'Invalid admin credentials' });
     }
 
-    const admin = await User.findOne({ where: { email, role: 'admin' } });
-    if (!admin) {
-      return res.render('auth/admin-login', { error: 'Invalid admin credentials' });
-    }
-
-    const isMatch = await bcrypt.compare(password, admin.password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.render('auth/admin-login', { error: 'Invalid admin credentials' });
     }
 
     req.session.user = {
-      id: admin.id,
-      fullName: admin.fullName,
-      email: admin.email,
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
       role: 'admin'
     };
 

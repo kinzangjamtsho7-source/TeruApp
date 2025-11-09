@@ -3,6 +3,10 @@ const { Expense } = require('../models');
 // Get all expenses for logged-in user
 exports.getExpenses = async (req, res) => {
   try {
+    // If no user session, return empty array
+    if (!req.session || !req.session.user || !req.session.user.id) {
+      return res.json([]);
+    }
     const userId = req.session.user.id;
     const expenses = await Expense.findAll({
       where: { userId },
@@ -17,6 +21,10 @@ exports.getExpenses = async (req, res) => {
 // Add new expense for logged-in user
 exports.addExpense = async (req, res) => {
   try {
+    // If no user session, return error
+    if (!req.session || !req.session.user || !req.session.user.id) {
+      return res.status(401).json({ message: 'Please log in to add expenses' });
+    }
     const userId = req.session.user.id;
     const { title, amount, category, date } = req.body;
     if (!title || !amount || !date) {
@@ -32,6 +40,10 @@ exports.addExpense = async (req, res) => {
 // Update an expense
 exports.updateExpense = async (req, res) => {
   try {
+    // If no user session, return error
+    if (!req.session || !req.session.user || !req.session.user.id) {
+      return res.status(401).json({ message: 'Please log in to update expenses' });
+    }
     const userId = req.session.user.id;
     const id = req.params.id;
     const { title, amount, category, date } = req.body;
@@ -53,6 +65,10 @@ exports.updateExpense = async (req, res) => {
 // Delete an expense
 exports.deleteExpense = async (req, res) => {
   try {
+    // If no user session, return error
+    if (!req.session || !req.session.user || !req.session.user.id) {
+      return res.status(401).json({ message: 'Please log in to delete expenses' });
+    }
     const userId = req.session.user.id;
     const id = req.params.id;
     const deleted = await Expense.destroy({ where: { id, userId } });

@@ -1,22 +1,23 @@
 const { User } = require('../models');
 
 exports.isAuthenticated = async (req, res, next) => {
+  // Allow access without authentication - just set user to null if not logged in
   if (!req.session || !req.session.user) {
-    return res.redirect('/login');
+    res.locals.user = null;
+    return next();
   }
   try {
     const user = await User.findByPk(req.session.user.id);
     if (!user) {
       req.session.destroy(() => {});
-      return res.redirect('/login');
+      res.locals.user = null;
+      return next();
     }
     res.locals.user = req.session.user;
     return next();
   } catch (error) {
-    return res.status(500).render('error', {
-      message: 'Authentication error',
-      error
-    });
+    res.locals.user = null;
+    return next();
   }
 };
 
