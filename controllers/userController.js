@@ -1,12 +1,21 @@
 const { User } = require('../models');
+const { getOrCreateGuestUser } = require('../utils/guestUser');
 
 exports.getBudget = async (req, res) => {
   try {
-    // If no user session, return default budget of 0
-    if (!req.session || !req.session.user || !req.session.user.id) {
-      return res.json({ monthlyBudget: 0, budgetSetDate: null });
+    let userId;
+    
+    // If user is logged in, use their ID
+    if (req.session && req.session.user && req.session.user.id) {
+      userId = req.session.user.id;
+    } else {
+      // Otherwise, use guest user
+      userId = await getOrCreateGuestUser();
+      if (!userId) {
+        return res.json({ monthlyBudget: 0, budgetSetDate: null });
+      }
     }
-    const userId = req.session.user.id;
+    
     const user = await User.findByPk(userId, { attributes: ['monthlyBudget', 'budgetSetDate'] });
     if (!user) {
       return res.json({ monthlyBudget: 0, budgetSetDate: null });
@@ -16,17 +25,26 @@ exports.getBudget = async (req, res) => {
       budgetSetDate: user.budgetSetDate
     });
   } catch (error) {
+    console.error('Error getting budget:', error);
     return res.status(500).json({ message: 'Failed to fetch budget', error: error.message });
   }
 };
 
 exports.updateBudget = async (req, res) => {
   try {
-    // If no user session, return error
-    if (!req.session || !req.session.user || !req.session.user.id) {
-      return res.status(401).json({ message: 'Please log in to update budget' });
+    let userId;
+    
+    // If user is logged in, use their ID
+    if (req.session && req.session.user && req.session.user.id) {
+      userId = req.session.user.id;
+    } else {
+      // Otherwise, use guest user
+      userId = await getOrCreateGuestUser();
+      if (!userId) {
+        return res.status(500).json({ message: 'Failed to update budget' });
+      }
     }
-    const userId = req.session.user.id;
+    
     const { monthlyBudget } = req.body;
 
     const parsed = Number(monthlyBudget);
@@ -45,6 +63,7 @@ exports.updateBudget = async (req, res) => {
 
     return res.json({ monthlyBudget: Number(user.monthlyBudget) });
   } catch (error) {
+    console.error('Error updating budget:', error);
     return res.status(500).json({ message: 'Failed to update budget', error: error.message });
   }
 };

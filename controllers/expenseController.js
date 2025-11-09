@@ -1,31 +1,49 @@
 const { Expense } = require('../models');
+const { getOrCreateGuestUser } = require('../utils/guestUser');
 
-// Get all expenses for logged-in user
+// Get all expenses - works without authentication
 exports.getExpenses = async (req, res) => {
   try {
-    // If no user session, return empty array
-    if (!req.session || !req.session.user || !req.session.user.id) {
-      return res.json([]);
+    let userId;
+    
+    // If user is logged in, use their ID
+    if (req.session && req.session.user && req.session.user.id) {
+      userId = req.session.user.id;
+    } else {
+      // Otherwise, use guest user
+      userId = await getOrCreateGuestUser();
+      if (!userId) {
+        return res.json([]);
+      }
     }
-    const userId = req.session.user.id;
+    
     const expenses = await Expense.findAll({
       where: { userId },
       order: [['date', 'DESC'], ['createdAt', 'DESC']]
     });
     return res.json(expenses);
   } catch (error) {
+    console.error('Error getting expenses:', error);
     return res.status(500).json({ message: 'Failed to load expenses' });
   }
 };
 
-// Add new expense for logged-in user
+// Add new expense - works without authentication
 exports.addExpense = async (req, res) => {
   try {
-    // If no user session, return error
-    if (!req.session || !req.session.user || !req.session.user.id) {
-      return res.status(401).json({ message: 'Please log in to add expenses' });
+    let userId;
+    
+    // If user is logged in, use their ID
+    if (req.session && req.session.user && req.session.user.id) {
+      userId = req.session.user.id;
+    } else {
+      // Otherwise, use guest user
+      userId = await getOrCreateGuestUser();
+      if (!userId) {
+        return res.status(500).json({ message: 'Failed to create expense' });
+      }
     }
-    const userId = req.session.user.id;
+    
     const { title, amount, category, date } = req.body;
     if (!title || !amount || !date) {
       return res.status(400).json({ message: 'title, amount, and date are required' });
@@ -33,18 +51,27 @@ exports.addExpense = async (req, res) => {
     const created = await Expense.create({ title, amount, category: category || null, date, userId });
     return res.json({ message: 'Expense added', data: created });
   } catch (error) {
+    console.error('Error adding expense:', error);
     return res.status(500).json({ message: 'Failed to add expense' });
   }
 };
 
-// Update an expense
+// Update an expense - works without authentication
 exports.updateExpense = async (req, res) => {
   try {
-    // If no user session, return error
-    if (!req.session || !req.session.user || !req.session.user.id) {
-      return res.status(401).json({ message: 'Please log in to update expenses' });
+    let userId;
+    
+    // If user is logged in, use their ID
+    if (req.session && req.session.user && req.session.user.id) {
+      userId = req.session.user.id;
+    } else {
+      // Otherwise, use guest user
+      userId = await getOrCreateGuestUser();
+      if (!userId) {
+        return res.status(500).json({ message: 'Failed to update expense' });
+      }
     }
-    const userId = req.session.user.id;
+    
     const id = req.params.id;
     const { title, amount, category, date } = req.body;
     const expense = await Expense.findOne({ where: { id, userId } });
@@ -58,18 +85,27 @@ exports.updateExpense = async (req, res) => {
     await expense.save();
     return res.json({ message: 'Expense updated', data: expense });
   } catch (error) {
+    console.error('Error updating expense:', error);
     return res.status(500).json({ message: 'Failed to update expense' });
   }
 };
 
-// Delete an expense
+// Delete an expense - works without authentication
 exports.deleteExpense = async (req, res) => {
   try {
-    // If no user session, return error
-    if (!req.session || !req.session.user || !req.session.user.id) {
-      return res.status(401).json({ message: 'Please log in to delete expenses' });
+    let userId;
+    
+    // If user is logged in, use their ID
+    if (req.session && req.session.user && req.session.user.id) {
+      userId = req.session.user.id;
+    } else {
+      // Otherwise, use guest user
+      userId = await getOrCreateGuestUser();
+      if (!userId) {
+        return res.status(500).json({ message: 'Failed to delete expense' });
+      }
     }
-    const userId = req.session.user.id;
+    
     const id = req.params.id;
     const deleted = await Expense.destroy({ where: { id, userId } });
     if (!deleted) {
@@ -77,6 +113,7 @@ exports.deleteExpense = async (req, res) => {
     }
     return res.json({ message: 'Expense deleted' });
   } catch (error) {
+    console.error('Error deleting expense:', error);
     return res.status(500).json({ message: 'Failed to delete expense' });
   }
 };

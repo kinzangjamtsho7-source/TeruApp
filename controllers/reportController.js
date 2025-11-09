@@ -1,13 +1,21 @@
 const { Expense } = require('../models');
-const { Op } = require('sequelize');
+const { getOrCreateGuestUser } = require('../utils/guestUser');
 
 exports.getSummary = async (req, res) => {
   try {
-    // If no user session, return empty report
-    if (!req.session || !req.session.user || !req.session.user.id) {
-      return res.json({ byCategory: {}, byDate: {} });
+    let userId;
+    
+    // If user is logged in, use their ID
+    if (req.session && req.session.user && req.session.user.id) {
+      userId = req.session.user.id;
+    } else {
+      // Otherwise, use guest user
+      userId = await getOrCreateGuestUser();
+      if (!userId) {
+        return res.json({ byCategory: {}, byDate: {} });
+      }
     }
-    const userId = req.session.user.id;
+    
     const expenses = await Expense.findAll({ where: { userId } });
 
     const byCategory = {};
@@ -25,6 +33,7 @@ exports.getSummary = async (req, res) => {
 
     return res.json({ byCategory, byDate });
   } catch (error) {
+    console.error('Error getting report summary:', error);
     return res.status(500).json({ message: 'Failed to build report' });
   }
 };
