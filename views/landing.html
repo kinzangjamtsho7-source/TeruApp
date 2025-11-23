@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teeru – Expense Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #5B2EE6 0%, #8667F2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      padding: 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+      animation: fadeIn 0.8s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo-container {
+      margin-bottom: 40px;
+    }
+
+    .logo-container img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      letter-spacing: -0.5px;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      margin-bottom: 50px;
+      opacity: 0.95;
+      line-height: 1.6;
+    }
+
+    .get-started-btn {
+      background: white;
+      color: #5B2EE6;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 16px 48px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      letter-spacing: 0.5px;
+    }
+
+    .get-started-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+      background: #f8f8f8;
+    }
+
+    .get-started-btn:active {
+      transform: translateY(0);
+    }
+
+    .features {
+      margin-top: 60px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 20px;
+      opacity: 0.9;
+    }
+
+    .feature {
+      text-align: center;
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .feature-text {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .tagline {
+        font-size: 1rem;
+        margin-bottom: 40px;
+      }
+
+      .logo-container img {
+        width: 100px;
+        height: 100px;
+      }
+
+      .get-started-btn {
+        padding: 14px 40px;
+        font-size: 1rem;
+      }
+
+      .features {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <img src="/images/logo.png" alt="Teeru Logo">
+    </div>
+    
+    <h1>Teeru</h1>
+    <p class="tagline">Take control of your expenses.<br>Track, manage, and save smarter.</p>
+    
+    <a href="/home" class="get-started-btn">Get Started</a>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">💰</div>
+        <div class="feature-text">Budget Tracking</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <div class="feature-text">Expense Reports</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔔</div>
+        <div class="feature-text">Smart Alerts</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌍</div>
+        <div class="feature-text">Multi-language</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

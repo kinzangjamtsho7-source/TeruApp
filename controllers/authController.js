@@ -1,60 +1,115 @@
 const { User } = require('../models');
 
-exports.getVerifyOtp = (req, res) => {
-  const email = req.session.pendingEmail;
-  console.log('📧 GET /verify-otp - Pending email in session:', email || 'none');
-  if (!email) {
-    console.log('⚠️ No pending email in session');
-    return res.status(400).render('error', { 
-      message: 'No pending verification session',
-      error: new Error('Verification session expired or invalid')
+// --------------------------------------
+// Show Signup Page
+// --------------------------------------
+exports.getSignup = (req, res) => {
+  res.render('auth/signup', { error: null });
+};
+
+// --------------------------------------
+// Handle Signup
+// --------------------------------------
+exports.postSignup = async (req, res) => {
+  try {
+    const { username, password, profileName } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).render("auth/signup", { error: "All fields are required" });
+    }
+
+    // Check if username already exists
+    const existingUser = await User.findOne({ where: { username } });
+    if (existingUser) {
+      return res.status(400).render("auth/signup", { error: "Username already taken" });
+    }
+
+    // Create user (offline password - no hashing)
+    await User.create({
+      username,
+      password,
+      profileName: profileName || null,
+      lastLogin: null
+    });
+
+    return res.redirect("/auth/login");
+  } catch (error) {
+    console.error("Signup error:", error);
+    return res.status(500).render("error", {
+      message: "Signup failed",
+      error
     });
   }
-  res.render('auth/verify-otp', { error: null });
 };
 
-exports.postVerifyOtp = async (req, res) => {
+// --------------------------------------
+// Show Login Page
+// --------------------------------------
+exports.getLogin = (req, res) => {
+  res.render('auth/login', { error: null });
+};
+
+// --------------------------------------
+// Handle Login
+// --------------------------------------
+exports.postLogin = async (req, res) => {
   try {
-    const { otp } = req.body;
-    const email = req.session.pendingEmail;
-    if (!email) {
-      return res.status(400).render('error', {
-        message: 'No pending verification session',
-        error: new Error('Verification session expired or invalid')
-      });
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).render("auth/login", { error: "All fields are required" });
     }
 
-    const user = await User.findOne({ where: { email } });
-    if (!user || !user.otpCode) {
-      return res.status(400).render('auth/verify-otp', { error: 'Invalid session' });
+    const user = await User.findOne({ where: { username } });
+
+    // Offline login verification (plain text)
+    if (!user || user.password !== password) {
+      return res.status(400).render("auth/login", { error: "Invalid username or password" });
     }
 
-    if (user.otpCode !== otp) {
-      return res.status(400).render('auth/verify-otp', { error: 'Incorrect OTP' });
-    }
+    // Save session userId (IMPORTANT)
+    req.session.userId = user.id;
 
-    if (user.otpExpiresAt && user.otpExpiresAt < new Date()) {
-      return res.status(400).render('auth/verify-otp', { error: 'OTP expired' });
-    }
-
-    user.isVerified = true;
-    user.otpCode = null;
-    user.otpExpiresAt = null;
+    // Save last login time
+    user.lastLogin = new Date();
     await user.save();
 
-    delete req.session.pendingEmail;
-    // Redirect to login page after successful verification
-    return res.redirect('/admin');
+    return res.redirect("/home"); // Your dashboard page
   } catch (error) {
-    console.error('Verify OTP error:', error);
-    return res.status(500).render('error', { message: 'OTP verification failed', error });
+    console.error("Login error:", error);
+    return res.status(500).render("error", {
+      message: "Login failed",
+      error
+    });
   }
 };
 
+// --------------------------------------
+// Logout
+// --------------------------------------
 exports.logout = (req, res) => {
   req.session.destroy(() => {
-    res.redirect('/home');
+    res.redirect("/auth/login");
   });
 };
 
-// Auth middleware lives in middleware/authMiddleware.js
+// --------------------------------------
+// Auto-login middleware (optional)
+// --------------------------------------
+exports.autoLogin = async (req, res, next) => {
+  try {
+    if (!req.session.userId) return next();
+
+    const user = await User.findByPk(req.session.userId);
+    if (!user) {
+      req.session.destroy();
+      return next();
+    }
+
+    req.currentUser = user;
+    res.locals.user = user;
+    next();
+  } catch (err) {
+    next(err);
+  }
+};

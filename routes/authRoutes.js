@@ -3,82 +3,78 @@ const path = require('path');
 const router = express.Router();
 const authController = require('../controllers/authController');
 const { isAuthenticated } = require('../middleware/authMiddleware');
-const bcrypt = require('bcryptjs');
-const { User } = require('../models');
 
-// Root route - redirect directly to home page
+// --------------------------------------
+// LANDING PAGE (No login needed)
+// --------------------------------------
 router.get('/', (req, res) => {
-  res.redirect('/home');
+  res.sendFile(path.join(__dirname, '..', 'views', 'landing.html'));
 });
 
-// Auth Routes
-router.get('/verify-otp', authController.getVerifyOtp);
-router.post('/verify-otp', authController.postVerifyOtp);
-router.get('/logout', authController.logout);
+// --------------------------------------
+// AUTH ROUTES
+// --------------------------------------
+router.get('/auth/signup', authController.getSignup);
+router.post('/auth/signup', authController.postSignup);
 
-// Home page - accessible without authentication
-router.get('/home', (req, res) => {
+router.get('/auth/login', authController.getLogin);
+router.post('/auth/login', authController.postLogin);
+
+router.get('/auth/logout', authController.logout);
+
+// --------------------------------------
+// MAIN APP PAGES (Require login)
+// --------------------------------------
+router.get('/home', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'index.html'));
 });
 
-// App pages - accessible without authentication
-router.get('/add-expense', (req, res) => {
+router.get('/add-expense', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'add-expense.html'));
 });
 
-router.get('/expenses', (req, res) => {
+router.get('/expenses', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'Expenses.html'));
 });
 
-router.get('/reports', (req, res) => {
+router.get('/reports', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'Reports.html'));
 });
 
-router.get('/settings', (req, res) => {
+router.get('/settings', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'settings.html'));
 });
 
-// Advertisement page
-router.get('/advertisement', (req, res) => {
+router.get('/advertisement', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'advertisement.html'));
 });
 
-router.get('/notifications', (req, res) => {
+router.get('/notifications', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'notification.html'));
 });
 
-// Admin routes (keep admin login for admin panel only)
+// --------------------------------------
+// ADMIN PANEL (Optional: Keep if needed)
+// --------------------------------------
 router.get('/admin', (req, res) => {
   res.render('auth/admin-login', { error: null });
 });
 
-// Handle admin login (for admin panel only)
 router.post('/admin/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ where: { email, role: 'admin' } });
-    if (!user) {
-      return res.render('auth/admin-login', { error: 'Invalid admin credentials' });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.render('auth/admin-login', { error: 'Invalid admin credentials' });
-    }
-
-    req.session.user = {
-      id: user.id,
-      fullName: user.fullName,
-      email: user.email,
-      role: 'admin'
-    };
-
-    res.redirect('/admin/home');
-  } catch (error) {
-    console.error('Admin login error:', error);
-    res.render('auth/admin-login', { error: 'Login failed. Please try again.' });
-  }
+  // You can clean this later if admin login is not required
+  res.send("Admin login disabled in offline mode.");
 });
+
+router.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Error destroying session:', err);
+      return res.status(500).send('Could not log out. Try again.');
+    }
+    res.clearCookie('connect.sid'); // clear the cookie
+    res.redirect('/auth/login'); // redirect to login page
+  });
+});
+
 
 module.exports = router;

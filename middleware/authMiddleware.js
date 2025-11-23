@@ -1,44 +1,28 @@
 const { User } = require('../models');
 
 exports.isAuthenticated = async (req, res, next) => {
-  // Allow access without authentication - just set user to null if not logged in
-  if (!req.session || !req.session.user) {
+  // Check using userId instead of user
+  if (!req.session || !req.session.userId) {
     res.locals.user = null;
-    return next();
+    return res.status(401).json({ error: "Unauthorized. Please log in." });
   }
+
   try {
-    const user = await User.findByPk(req.session.user.id);
+    const user = await User.findByPk(req.session.userId);
+
     if (!user) {
       req.session.destroy(() => {});
       res.locals.user = null;
-      return next();
+      return res.status(401).json({ error: "Unauthorized. Please log in." });
     }
-    res.locals.user = req.session.user;
-    return next();
+
+    // Set the logged-in user for other controllers
+    req.currentUser = user;
+    res.locals.user = user;
+
+    next();
   } catch (error) {
-    res.locals.user = null;
-    return next();
+    console.error("Auth check failed:", error);
+    res.status(500).json({ error: "Authentication failed" });
   }
 };
-
-exports.isAdmin = (req, res, next) => {
-  if (!req.session || !req.session.user || req.session.user.role !== 'admin') {
-    return res.status(403).render('error', {
-      message: 'Access denied. Admins only.',
-      error: new Error('Unauthorized')
-    });
-  }
-  return next();
-};
-
-exports.isStudent = (req, res, next) => {
-  if (!req.session || !req.session.user || req.session.user.role !== 'user') {
-    return res.status(403).render('error', {
-      message: 'Access denied. Users only.',
-      error: new Error('Unauthorized')
-    });
-  }
-  return next();
-};
-
-

@@ -7,50 +7,30 @@ module.exports = (sequelize) => {
       primaryKey: true,
       autoIncrement: true
     },
-    fullName: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    email: {
+
+    // Username for login
+    username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true
-      }
+      unique: true
     },
+
+    // Simple password (can be hashed later)
     password: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    role: {
-      type: DataTypes.ENUM('user', 'admin'),
-      allowNull: false,
-      defaultValue: 'user'
-    },
-    isVerified: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
-    },
-    otpCode: {
+
+    // Optional display name
+    profileName: {
       type: DataTypes.STRING,
       allowNull: true
     },
-    otpExpiresAt: {
+
+    // Track last logged user
+    lastLogin: {
       type: DataTypes.DATE,
       allowNull: true
-    }
-    ,
-    monthlyBudget: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-      defaultValue: 0
-    },
-    budgetSetDate: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: DataTypes.NOW
     }
   }, {
     tableName: 'users'
@@ -58,5 +38,3 @@ module.exports = (sequelize) => {
 
   return User;
 };
-
-

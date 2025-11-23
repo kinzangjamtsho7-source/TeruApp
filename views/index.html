@@ -48,6 +48,23 @@
       font-weight:700;line-height:1;
     }
 
+    .logout-btn {
+  padding: 8px 12px;
+  background-color: rgba(255,255,255,0.1);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.12s ease;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255,255,255,0.25);
+  transform: translateY(-2px);
+}
+
+
     /* Main menu */
     .main{padding:20px;max-width:760px;margin:18px auto}
     .welcome{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
@@ -148,6 +165,14 @@
           <span class="badge" aria-hidden="true">3</span>
         </button>
       </a>
+
+
+      <!-- LOGOUT BUTTON -->
+  <form action="/logout" method="GET" style="display:inline;">
+    <button type="submit" class="logout-btn" title="Logout" aria-label="Logout">
+      Logout
+    </button>
+  </form>
     </div>
   </header>
 

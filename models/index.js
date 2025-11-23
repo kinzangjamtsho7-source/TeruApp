@@ -1,19 +1,19 @@
-const sequelize = require('../config/db');
-const defineUser = require('./User');
-const defineExpense = require('./Expense');
+  const sequelize = require('../config/db');
+  const defineUser = require('./User');
+  const defineExpense = require('./Expense');
 
-const models = {};
+  const models = {};
 
-models.User = defineUser(sequelize);
-models.Expense = defineExpense(sequelize);
+  models.User = defineUser(sequelize);
+  models.Expense = defineExpense(sequelize);
 
-// Associations
-models.User.hasMany(models.Expense, { foreignKey: 'userId', as: 'expenses' });
-models.Expense.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+  // Associations
+  models.User.hasMany(models.Expense, { foreignKey: 'userId', as: 'expenses' });
+  models.Expense.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
 
-module.exports = {
-  sequelize,
-  ...models
-};
+  module.exports = {
+    sequelize,
+    ...models
+  };
 
 
